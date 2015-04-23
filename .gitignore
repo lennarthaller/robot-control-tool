@@ -1,5 +1,5 @@
-*.Robot Control Tool.vcxproj.user
-*.Robot Control Tool.vcxproj.filters
-*.Robot Control Tool.vcxproj
+*.vcxproj.user
+*.filters
+*.vcxproj
 
 Debug/
