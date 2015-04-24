@@ -2,9 +2,10 @@
 
 Worker::Worker() {
  connect(&timer, SIGNAL (timeout()), this, SLOT (doWork()));
- timer.start(10);
+ timer.start(500);
  }
  
  void Worker::doWork() {
  //Hier der auszuführende quellcode
+	 qDebug () << "Test";
  }

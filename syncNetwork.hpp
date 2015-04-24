@@ -3,10 +3,12 @@
 
 #include <QtCore\QObject>
 #include <QtCore\qtimer.h>
+#include <iostream>
+#include <QtCore\QtDebug>;
 
 class Worker : public QObject
 {
- //Q_OBJECT
+ Q_OBJECT
  
 public:
 	Worker(); 
@@ -19,3 +21,4 @@ private:
 };
 
 #endif
+
