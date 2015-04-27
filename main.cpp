@@ -6,12 +6,6 @@
 
 int main(int argc, char *argv[])
 {
-  /*CNetwork Network;
-
-	if (Network.NetworkInit () == 1) {
-		std::cout << "Netzwerkfehler." << std::endl;
-	}*/
-
     QApplication app(argc, argv);
 	MainWindow mainWin;
     //Q_INIT_RESOURCE(dockwidgets);

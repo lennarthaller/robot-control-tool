@@ -34,6 +34,18 @@ void MainWindow::Info()
 
 void MainWindow::createActions()
 {
+	qshowScanAct = new QAction(tr("&Show scan"), this);
+	qshowScanAct->setStatusTip(tr("Show the LiDAR scan"));
+	connect(qshowScanAct, SIGNAL(triggered()), this, SLOT(ShowScan()));
+
+	qshowMotorDataAct = new QAction(tr("&Show motor data"), this);
+	qshowMotorDataAct->setStatusTip(tr("Show motor data"));
+	connect(qshowMotorDataAct, SIGNAL(triggered()), this, SLOT(ShowMotorData()));
+
+	qshowGeneralAct = new QAction(tr("&Show general data"), this);
+	qshowGeneralAct->setStatusTip(tr("Show general data"));
+	connect(qshowGeneralAct, SIGNAL(triggered()), this, SLOT(ShowGeneralData()));
+
     quitAct = new QAction(tr("&Quit"), this);
     quitAct->setShortcuts(QKeySequence::Quit);
     quitAct->setStatusTip(tr("Quit the application"));
@@ -50,6 +62,11 @@ void MainWindow::createActions()
 
 void MainWindow::createMenus()
 {
+	ShowData = menuBar()->addMenu(tr("&Show data"));
+	ShowData->addAction (qshowScanAct);
+	ShowData->addAction (qshowMotorDataAct);
+	ShowData->addAction (qshowGeneralAct);
+
     GeneralMenu = menuBar()->addMenu(tr("&General"));
 	GeneralMenu->addAction(qconnectAct);
     GeneralMenu->addAction(aboutAct);
@@ -64,15 +81,27 @@ void MainWindow::ConnectToRobot () {
 			QMessageBox::information(this, tr("Connection status"), tr("You are now connected to the robot."));
 					bConnected = true;
 					connect(&timer, SIGNAL (timeout()), this, SLOT (doWork()));
-					timer.start(500);
+					timer.start(UPDATEFREQUENCY);
 		}
 	}else{
 		QMessageBox::information(this, tr("Connection status"), tr("You are already connected to the robot."));
 	}
 }
 
+void MainWindow::ShowScan () {
+
+}
+
+void MainWindow::ShowMotorData () {
+
+}
+
+void MainWindow::ShowGeneralData () {
+
+}
+
 void MainWindow::doWork() {
- //Hier der auszuführende quellcode
+	Network.UpdateData ();
 	//qDebug () << "Test";
 	//SetText ("Test");
  }

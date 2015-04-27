@@ -4,6 +4,8 @@
 #include <QtGui\QtGui>
 #include "SyncNetwork.hpp"
 
+#define  UPDATEFREQUENCY 500
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -16,6 +18,9 @@ private slots:
     void Info();
 	void ConnectToRobot ();
 	void doWork();
+	void ShowScan();
+	void ShowMotorData ();
+	void ShowGeneralData ();
 
 private:
     void createActions();
@@ -31,10 +36,15 @@ private:
     QListWidget *customerList;
     QListWidget *paragraphsList;
 
-    QMenu *GeneralMenu;
+	QMenu *GeneralMenu;
+	QAction *qconnectAct;
     QAction *aboutAct;
     QAction *quitAct;
-	QAction *qconnectAct;
+
+	QMenu *ShowData;
+	QAction *qshowScanAct;
+	QAction *qshowMotorDataAct;
+	QAction *qshowGeneralAct;
 
 	QString msg;
 

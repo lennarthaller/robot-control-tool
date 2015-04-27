@@ -7,3 +7,7 @@ int SyncNetwork::InitNetwork () {
 int SyncNetwork::Connect () {
 	return (Network.Connect());
 }
+
+void SyncNetwork::UpdateData () {
+
+}
