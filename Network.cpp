@@ -1,7 +1,7 @@
 #include "Network.hpp"
 
 CNetwork::CNetwork (void) {
-	AdressFromServer.sin_addr.s_addr = inet_addr ("192.168.173.120");
+	AdressFromServer.sin_addr.s_addr = inet_addr ("192.168.100.72");
 	AdressFromServer.sin_port = htons(7000);
 	AdressFromServer.sin_family = AF_INET;
 	

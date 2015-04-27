@@ -118,22 +118,21 @@ void MainWindow::ShowGeneralData () {
 }
 
 void MainWindow::DisplayScan () {
-
+	Network.UpdateData ();
+	textEdit->clear();
 }
 
 void MainWindow::DisplayMotorData () {
-
+	Network.UpdateData ();
+	textEdit->clear();
+	textEdit->setText ("Motor power from motor 1: "); textEdit->append (QString::number(*(Network.GetMotorPower())));
 }
 
 void MainWindow::DisplayGeneralData () {
-
+	Network.UpdateData ();
+	textEdit->clear();
 }
 
-void MainWindow::doWork() {
-	Network.UpdateData ();
-	//qDebug () << "Test";
-	//SetText ("Test");
- }
 
 /*void MainWindow::createDockWindows()
 {

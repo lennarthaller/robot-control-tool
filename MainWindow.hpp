@@ -17,7 +17,6 @@ public:
 private slots:
     void Info();
 	void ConnectToRobot ();
-	void doWork();
 	void ShowScan();
 	void ShowMotorData ();
 	void ShowGeneralData ();
