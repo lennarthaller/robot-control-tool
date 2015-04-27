@@ -6,7 +6,7 @@
 
 class Worker : public QObject
 {
- //Q_OBJECT
+ Q_OBJECT
  
 public:
 	Worker(); 
