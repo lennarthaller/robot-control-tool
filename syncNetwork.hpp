@@ -1,26 +1,15 @@
-#ifndef SYNC_NETWORK_HPP
-#define SYNC_NETWORK_HPP
+#ifndef SYNCNetwork_HPP
+#define SYNCNetwork_HPP
 
-#include <QtCore\QObject>
-#include <QtCore\qtimer.h>
-#include <iostream>
-#include "MainWindow.hpp"
-#include "GlobalState.hpp"
+#include "network.hpp"
 
-class Worker : public QObject
+class SyncNetwork 
 {
- Q_OBJECT
- 
 public:
-	Worker(); 
- 
-private slots:
-	void doWork();
- 
+	int InitNetwork ();
+	int Connect ();
 private:
-	QTimer timer;
-	MainWindow mainWin;
+	CNetwork Network;
 };
 
 #endif
-

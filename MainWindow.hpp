@@ -2,6 +2,7 @@
 #define MAINWINDOW_HPP
 
 #include <QtGui\QtGui>
+#include "SyncNetwork.hpp"
 
 class MainWindow : public QMainWindow
 {
@@ -10,16 +11,21 @@ class MainWindow : public QMainWindow
 public:
     MainWindow();
 	void SetText (const QString text);
-	//QTextEdit* GetTextEdit () {return textEdit;}
 
 private slots:
     void Info();
+	void ConnectToRobot ();
+	void doWork();
 
 private:
     void createActions();
     void createMenus();
     void createToolBars();
     void createDockWindows();
+
+	bool bConnected;
+
+	QTimer timer;
 
     QTextEdit *textEdit;
     QListWidget *customerList;
@@ -28,6 +34,11 @@ private:
     QMenu *GeneralMenu;
     QAction *aboutAct;
     QAction *quitAct;
+	QAction *qconnectAct;
+
+	QString msg;
+
+	SyncNetwork Network;
 };
 
 #endif

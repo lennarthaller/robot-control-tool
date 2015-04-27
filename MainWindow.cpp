@@ -3,14 +3,19 @@
 #include "mainwindow.hpp"
 
 MainWindow::MainWindow()
-{
+{	
+	bConnected = false;
+
     textEdit = new QTextEdit;
 	textEdit->setReadOnly (true);
     setCentralWidget(textEdit);
 
     createActions();
-    createMenus();
-    //createDockWindows();
+	createMenus();
+
+	if (Network.InitNetwork () == 1) {
+		QMessageBox::critical(this, tr("System error"), tr("Failed to initialize the Network ressources!"));
+	}
 
     setWindowTitle(tr("Robot Control Tool"));
 }
@@ -37,14 +42,40 @@ void MainWindow::createActions()
     aboutAct = new QAction(tr("&Info"), this);
     aboutAct->setStatusTip(tr("Show some information"));
     connect(aboutAct, SIGNAL(triggered()), this, SLOT(Info()));
+
+	qconnectAct = new QAction(tr("&Connect"), this);
+	qconnectAct->setStatusTip(tr("Connect with the robot"));
+	connect(qconnectAct, SIGNAL(triggered()), this, SLOT(ConnectToRobot()));
 }
 
 void MainWindow::createMenus()
 {
     GeneralMenu = menuBar()->addMenu(tr("&General"));
+	GeneralMenu->addAction(qconnectAct);
     GeneralMenu->addAction(aboutAct);
     GeneralMenu->addAction(quitAct);
 }
+
+void MainWindow::ConnectToRobot () {
+	if(bConnected == false) {
+		if (Network.Connect () == 1) {
+			QMessageBox::critical(this, tr("Network error"), tr("Failed to connect to the robot!"));
+		}else{
+			QMessageBox::information(this, tr("Connection status"), tr("You are now connected to the robot."));
+					bConnected = true;
+					connect(&timer, SIGNAL (timeout()), this, SLOT (doWork()));
+					timer.start(500);
+		}
+	}else{
+		QMessageBox::information(this, tr("Connection status"), tr("You are already connected to the robot."));
+	}
+}
+
+void MainWindow::doWork() {
+ //Hier der auszuführende quellcode
+	//qDebug () << "Test";
+	//SetText ("Test");
+ }
 
 /*void MainWindow::createDockWindows()
 {
