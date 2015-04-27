@@ -1,5 +1,11 @@
 *.vcxproj.user
 *.filters
 *.vcxproj
+*.pdb
+*.opensdf
+*.sdf
+*.suo
+*.sln
 
 Debug/
+ipch/
