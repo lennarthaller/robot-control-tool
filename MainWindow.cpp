@@ -26,7 +26,7 @@ void MainWindow::SetText (const QString text) {
 
 void MainWindow::Info()
 {
-   QMessageBox::about(this, tr("About this programm"),
+   QMessageBox::about(this, tr("About this program"),
 				tr("This tool was programmed by "
 				"<b> Lennart Haller </b> to control and debug "
                 "the robot. "));
@@ -79,9 +79,8 @@ void MainWindow::ConnectToRobot () {
 			QMessageBox::critical(this, tr("Network error"), tr("Failed to connect to the robot!"));
 		}else{
 			QMessageBox::information(this, tr("Connection status"), tr("You are now connected to the robot."));
-					bConnected = true;
-					connect(&timer, SIGNAL (timeout()), this, SLOT (doWork()));
-					timer.start(UPDATEFREQUENCY);
+				timer.start(UPDATEFREQUENCY);
+				bConnected = true;
 		}
 	}else{
 		QMessageBox::information(this, tr("Connection status"), tr("You are already connected to the robot."));
@@ -89,14 +88,44 @@ void MainWindow::ConnectToRobot () {
 }
 
 void MainWindow::ShowScan () {
-
+	if (bConnected == true) {
+		disconnect(&timer, SIGNAL (timeout()), this, SLOT (DisplayMotorData()));
+		disconnect(&timer, SIGNAL (timeout()), this, SLOT (DisplayGeneralData()));
+		connect(&timer, SIGNAL (timeout()), this, SLOT (DisplayScan()));
+	}else{
+		QMessageBox::information(this, tr("Information"), tr("You need to connect to the robot first."));
+	}
 }
 
 void MainWindow::ShowMotorData () {
-
+		if (bConnected == true) {
+		disconnect(&timer, SIGNAL (timeout()), this, SLOT (DisplayScan()));
+		disconnect(&timer, SIGNAL (timeout()), this, SLOT (DisplayGeneralData()));
+		connect(&timer, SIGNAL (timeout()), this, SLOT (DisplayMotorData()));
+	}else{
+		QMessageBox::information(this, tr("Information"), tr("You need to connect to the robot first."));
+	}
 }
 
 void MainWindow::ShowGeneralData () {
+		if (bConnected == true) {
+		disconnect(&timer, SIGNAL (timeout()), this, SLOT (DisplayScan()));
+		disconnect(&timer, SIGNAL (timeout()), this, SLOT (DisplayMotorData()));
+		connect(&timer, SIGNAL (timeout()), this, SLOT (DisplayGeneralData()));
+	}else{
+		QMessageBox::information(this, tr("Information"), tr("You need to connect to the robot first."));
+	}
+}
+
+void MainWindow::DisplayScan () {
+
+}
+
+void MainWindow::DisplayMotorData () {
+
+}
+
+void MainWindow::DisplayGeneralData () {
 
 }
 

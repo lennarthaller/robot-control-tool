@@ -21,6 +21,9 @@ private slots:
 	void ShowScan();
 	void ShowMotorData ();
 	void ShowGeneralData ();
+	void DisplayScan ();
+	void DisplayMotorData ();
+	void DisplayGeneralData ();
 
 private:
     void createActions();
