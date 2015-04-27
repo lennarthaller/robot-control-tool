@@ -5,6 +5,7 @@
 MainWindow::MainWindow()
 {
     textEdit = new QTextEdit;
+	textEdit->setReadOnly (true);
     setCentralWidget(textEdit);
 
     createActions();
@@ -14,13 +15,16 @@ MainWindow::MainWindow()
     setWindowTitle(tr("Robot Control Tool"));
 }
 
+void MainWindow::SetText (const QString text) {
+	textEdit->setText (text);
+}
 
 void MainWindow::Info()
 {
    QMessageBox::about(this, tr("About this programm"),
-            tr("This tool was programmed by "
-			"<b> Lennart Haller </b> to control and debug "
-               "the robot. "));
+				tr("This tool was programmed by "
+				"<b> Lennart Haller </b> to control and debug "
+                "the robot. "));
 }
 
 void MainWindow::createActions()

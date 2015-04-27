@@ -4,5 +4,8 @@
 *.pdb
 *.opensdf
 *.sdf
+*.suo
+*.sln
 
 Debug/
+ipch/

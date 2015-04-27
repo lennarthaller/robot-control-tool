@@ -4,7 +4,8 @@
 #include <QtCore\QObject>
 #include <QtCore\qtimer.h>
 #include <iostream>
-#include <QtCore\QtDebug>;
+#include "MainWindow.hpp"
+#include "GlobalState.hpp"
 
 class Worker : public QObject
 {
@@ -18,6 +19,7 @@ private slots:
  
 private:
 	QTimer timer;
+	MainWindow mainWin;
 };
 
 #endif

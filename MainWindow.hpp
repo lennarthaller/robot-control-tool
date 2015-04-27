@@ -1,3 +1,6 @@
+#ifndef MAINWINDOW_HPP
+#define MAINWINDOW_HPP
+
 #include <QtGui\QtGui>
 
 class MainWindow : public QMainWindow
@@ -6,6 +9,8 @@ class MainWindow : public QMainWindow
 
 public:
     MainWindow();
+	void SetText (const QString text);
+	//QTextEdit* GetTextEdit () {return textEdit;}
 
 private slots:
     void Info();
@@ -24,3 +29,5 @@ private:
     QAction *aboutAct;
     QAction *quitAct;
 };
+
+#endif
