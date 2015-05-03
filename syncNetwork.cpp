@@ -23,17 +23,29 @@ int SyncNetwork::Connect () {
 }
 
 void SyncNetwork::UpdateData () {
-	for (int i=0; i<100; i++) {
-		m_nScannerData[i] = Network.Recv ();
-	}
-	for (int i=0; i<4; i++) {
-		m_nOdometryticks[i] = Network.Recv ();
-	}
-	for (int i=0; i<4; i++) {
-		m_nMotorPower[i] = Network.Recv ();
-	}
-	m_fCalculatedDrivingDirection = (static_cast<float> (Network.Recv ()/10));
-	m_fTargetDrivingDirection = (static_cast<float> (Network.Recv ()/10));
-	m_fVoltage = (static_cast<float> (Network.Recv ()/10));
-	m_nLoopTicks = Network.Recv ();
+	 if (Network.Recv () != -1) {
+		
+		 for (int i=0; i<4; i++) {
+			m_nOdometryticks[i] = Network.GetData ();
+		}
+		for (int i=0; i<100; i++) {
+			m_nScannerData[i] = Network.GetData ();
+		}
+		for (int i=0; i<4; i++) {
+			m_nMotorPower[i] = Network.GetData ();
+		}
+		m_fCalculatedDrivingDirection = (static_cast<float> (Network.GetData ()));
+		m_fCalculatedDrivingDirection /= 10;
+		m_fTargetDrivingDirection = (static_cast<float> (Network.GetData ()));
+		m_fTargetDrivingDirection /= 10;
+		m_fVoltage = (static_cast<float> (Network.GetData ()));
+		m_fVoltage /= 100;
+		m_nLoopTicks = (Network.GetData ()*10000);
+
+		/*m_fCalculatedDrivingDirection = Network.GetData();
+		m_fTargetDrivingDirection = Network.GetData ();
+		m_fVoltage = Network.GetData ();
+		m_nLoopTicks = Network.GetData ();
+		Network.Clear (); */
+	 }
 }

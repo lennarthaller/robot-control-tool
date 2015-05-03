@@ -4,7 +4,7 @@
 #include <QtGui\QtGui>
 #include "SyncNetwork.hpp"
 
-#define  UPDATEFREQUENCY 500
+#define  UPDATEFREQUENCY 100
 
 class MainWindow : public QMainWindow
 {

@@ -75,7 +75,7 @@ void MainWindow::createMenus()
 
 void MainWindow::ConnectToRobot () {
 	if(bConnected == false) {
-		if (Network.Connect () == 1) {
+		if (Network.Connect () != 0) {
 			QMessageBox::critical(this, tr("Network error"), tr("Failed to connect to the robot!"));
 		}else{
 			QMessageBox::information(this, tr("Connection status"), tr("You are now connected to the robot."));
@@ -125,12 +125,45 @@ void MainWindow::DisplayScan () {
 void MainWindow::DisplayMotorData () {
 	Network.UpdateData ();
 	textEdit->clear();
-	textEdit->setText ("Motor power from motor 1: "); textEdit->append (QString::number(*(Network.GetMotorPower())));
+
+	textEdit->setText ("Motor 3: ");
+	textEdit->moveCursor (QTextCursor::End);
+	textEdit->insertPlainText (QString::number(*(Network.GetMotorPower()+2)));
+	textEdit->moveCursor (QTextCursor::End);
+	textEdit->insertPlainText ("          ||          Motor 2: "); //10 leerzeichen zwischen den | und Motor
+	textEdit->moveCursor (QTextCursor::End);
+	textEdit->insertPlainText (QString::number(*(Network.GetMotorPower()+1)));
+	textEdit->moveCursor (QTextCursor::End);
+	
+	textEdit->append ("\n\n\n\n\n\n\n\n\n\n\n");
+
+	textEdit->insertPlainText ("Motor 1: ");
+	textEdit->moveCursor (QTextCursor::End);
+	textEdit->insertPlainText (QString::number(*(Network.GetMotorPower())));
+	textEdit->moveCursor (QTextCursor::End);
+	textEdit->insertPlainText ("                       Motor 4: ");
+	textEdit->moveCursor (QTextCursor::End);
+	textEdit->insertPlainText (QString::number(*(Network.GetMotorPower()+3)));
+	textEdit->moveCursor (QTextCursor::End);
+
+	/*textEdit->setText ("Ticks 2 "); textEdit->append (QString::number(*(Network.GetOdometryTicks()+1)));
+	textEdit->append ("\nMotor 2 "); textEdit->append (); */
+
 }
 
 void MainWindow::DisplayGeneralData () {
 	Network.UpdateData ();
 	textEdit->clear();
+
+	textEdit->setText ("Operating Voltage "); 
+	textEdit->moveCursor (QTextCursor::End);
+	textEdit->insertPlainText (QString::number(Network.GetVoltage()));
+	textEdit->moveCursor (QTextCursor::End);
+	
+	textEdit->append ("\nMain loop ticks per second "); 
+	textEdit->moveCursor (QTextCursor::End);
+	textEdit->insertPlainText (QString::number(Network.GetLoopTicks()));
+	textEdit->moveCursor (QTextCursor::End);
 }
 
 
