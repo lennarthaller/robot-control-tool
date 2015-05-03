@@ -135,6 +135,14 @@ void MainWindow::DisplayMotorData () {
 	textEdit->insertPlainText (QString::number(*(Network.GetMotorPower()+1)));
 	textEdit->moveCursor (QTextCursor::End);
 	
+	textEdit->append ("Odometry 3: ");
+	textEdit->moveCursor (QTextCursor::End);
+	textEdit->insertPlainText (QString::number(*(Network.GetOdometryTicks()+2)));
+	textEdit->insertPlainText ("                 Odometry 4: ");
+	textEdit->moveCursor (QTextCursor::End);
+	textEdit->insertPlainText (QString::number(*(Network.GetOdometryTicks()+3)));
+	textEdit->moveCursor (QTextCursor::End);
+
 	textEdit->append ("\n\n\n\n\n\n\n\n\n\n\n");
 
 	textEdit->insertPlainText ("Motor 1: ");
@@ -146,9 +154,13 @@ void MainWindow::DisplayMotorData () {
 	textEdit->insertPlainText (QString::number(*(Network.GetMotorPower()+3)));
 	textEdit->moveCursor (QTextCursor::End);
 
-	/*textEdit->setText ("Ticks 2 "); textEdit->append (QString::number(*(Network.GetOdometryTicks()+1)));
-	textEdit->append ("\nMotor 2 "); textEdit->append (); */
-
+	textEdit->append ("Odometry 2: ");
+	textEdit->moveCursor (QTextCursor::End);
+	textEdit->insertPlainText (QString::number(*(Network.GetOdometryTicks()+1)));
+	textEdit->insertPlainText ("                 Odometry 1: ");
+	textEdit->moveCursor (QTextCursor::End);
+	textEdit->insertPlainText (QString::number(*(Network.GetOdometryTicks())));
+	textEdit->moveCursor (QTextCursor::End);
 }
 
 void MainWindow::DisplayGeneralData () {
