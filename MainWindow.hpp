@@ -2,8 +2,9 @@
 #define MAINWINDOW_HPP
 
 #include <QtGui\QtGui>
+#include <QPainter>
 #include "SyncNetwork.hpp"
-
+//#include "Render.hpp"
 #define  UPDATEFREQUENCY 100
 
 class MainWindow : public QMainWindow
@@ -27,16 +28,17 @@ private slots:
 private:
     void createActions();
     void createMenus();
-    void createToolBars();
-    void createDockWindows();
+    void createDockWindow();
 
 	bool bConnected;
 
 	QTimer timer;
 
+	QLabel *label;
+	QPixmap pixmap;
+	QDockWidget *dock;
+
     QTextEdit *textEdit;
-    QListWidget *customerList;
-    QListWidget *paragraphsList;
 
 	QMenu *GeneralMenu;
 	QAction *qconnectAct;
@@ -47,8 +49,6 @@ private:
 	QAction *qshowScanAct;
 	QAction *qshowMotorDataAct;
 	QAction *qshowGeneralAct;
-
-	QString msg;
 
 	SyncNetwork Network;
 };

@@ -10,8 +10,12 @@ MainWindow::MainWindow()
 	textEdit->setReadOnly (true);
     setCentralWidget(textEdit);
 
+	label = new QLabel(this);
+	label->setPixmap(pixmap);
+
     createActions();
 	createMenus();
+	createDockWindow ();
 
 	if (Network.InitNetwork () == 1) {
 		QMessageBox::critical(this, tr("System error"), tr("Failed to initialize the Network ressources!"));
@@ -92,6 +96,7 @@ void MainWindow::ShowScan () {
 		disconnect(&timer, SIGNAL (timeout()), this, SLOT (DisplayMotorData()));
 		disconnect(&timer, SIGNAL (timeout()), this, SLOT (DisplayGeneralData()));
 		connect(&timer, SIGNAL (timeout()), this, SLOT (DisplayScan()));
+		dock->show();
 	}else{
 		QMessageBox::information(this, tr("Information"), tr("You need to connect to the robot first."));
 	}
@@ -102,6 +107,7 @@ void MainWindow::ShowMotorData () {
 		disconnect(&timer, SIGNAL (timeout()), this, SLOT (DisplayScan()));
 		disconnect(&timer, SIGNAL (timeout()), this, SLOT (DisplayGeneralData()));
 		connect(&timer, SIGNAL (timeout()), this, SLOT (DisplayMotorData()));
+		dock->hide();
 	}else{
 		QMessageBox::information(this, tr("Information"), tr("You need to connect to the robot first."));
 	}
@@ -112,6 +118,7 @@ void MainWindow::ShowGeneralData () {
 		disconnect(&timer, SIGNAL (timeout()), this, SLOT (DisplayScan()));
 		disconnect(&timer, SIGNAL (timeout()), this, SLOT (DisplayMotorData()));
 		connect(&timer, SIGNAL (timeout()), this, SLOT (DisplayGeneralData()));
+		dock->hide();
 	}else{
 		QMessageBox::information(this, tr("Information"), tr("You need to connect to the robot first."));
 	}
@@ -120,6 +127,19 @@ void MainWindow::ShowGeneralData () {
 void MainWindow::DisplayScan () {
 	Network.UpdateData ();
 	textEdit->clear();
+
+	for (int i=0; i<100; i++) {
+		textEdit->insertPlainText ("Messung ");
+		textEdit->moveCursor (QTextCursor::End);
+		textEdit->insertPlainText (QString::number(i));
+		textEdit->moveCursor (QTextCursor::End);
+		textEdit->insertPlainText (":   ");
+		textEdit->moveCursor (QTextCursor::End);
+		textEdit->insertPlainText (QString::number(*(Network.GetScannerData()+i)));
+		textEdit->moveCursor (QTextCursor::End);
+		textEdit->insertPlainText ("\n");
+		textEdit->moveCursor (QTextCursor::End);
+	}
 }
 
 void MainWindow::DisplayMotorData () {
@@ -179,48 +199,32 @@ void MainWindow::DisplayGeneralData () {
 }
 
 
-/*void MainWindow::createDockWindows()
-{
-    QDockWidget *dock = new QDockWidget(tr("Customers"), this);
+void MainWindow::createDockWindow() {
+    dock = new QDockWidget(tr("LiDAR scan"), this);
     dock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-    customerList = new QListWidget(dock);
-    customerList->addItems(QStringList()
-            << "John Doe, Harmony Enterprises, 12 Lakeside, Ambleton"
-            << "Jane Doe, Memorabilia, 23 Watersedge, Beaton"
-            << "Tammy Shea, Tiblanka, 38 Sea Views, Carlton"
-            << "Tim Sheen, Caraba Gifts, 48 Ocean Way, Deal"
-            << "Sol Harvey, Chicos Coffee, 53 New Springs, Eccleston"
-            << "Sally Hobart, Tiroli Tea, 67 Long River, Fedula");
-    dock->setWidget(customerList);
+    dock->setWidget(label);
     addDockWidget(Qt::RightDockWidgetArea, dock);
-    viewMenu->addAction(dock->toggleViewAction());
+	dock->hide();
+} 
 
-    dock = new QDockWidget(tr("Paragraphs"), this);
-    paragraphsList = new QListWidget(dock);
-    paragraphsList->addItems(QStringList()
-            << "Thank you for your payment which we have received today."
-            << "Your order has been dispatched and should be with you "
-               "within 28 days."
-            << "We have dispatched those items that were in stock. The "
-               "rest of your order will be dispatched once all the "
-               "remaining items have arrived at our warehouse. No "
-               "additional shipping charges will be made."
-            << "You made a small overpayment (less than $5) which we "
-               "will keep on account for you, or return at your request."
-            << "You made a small underpayment (less than $1), but we have "
-               "sent your order anyway. We'll add this underpayment to "
-               "your next bill."
-            << "Unfortunately you did not send enough money. Please remit "
-               "an additional $. Your order will be dispatched as soon as "
-               "the complete amount has been received."
-            << "You made an overpayment (more than $5). Do you wish to "
-               "buy more items, or should we return the excess to you?");
-    dock->setWidget(paragraphsList);
-    addDockWidget(Qt::RightDockWidgetArea, dock);
-    viewMenu->addAction(dock->toggleViewAction());
 
-    connect(customerList, SIGNAL(currentTextChanged(QString)),
-            this, SLOT(insertCustomer(QString)));
-    connect(paragraphsList, SIGNAL(currentTextChanged(QString)),
-            this, SLOT(addParagraph(QString)));
-} */
+/*
+#include "mainwindow.h"
+#include <QtGui/QWidget>
+#include <QtGui/QVBoxLayout>
+#include <QtGui/QDockWidget>
+#include <QtGui/QLabel>
+#include <QtGui/QTextEdit>
+
+// container QWidget to put QVBoxLayout containing QLabel and QTextEdit
+QWidget *widDockWid = new QWidget(dock);
+QVBoxLayout *layoutDockWid = new QVBoxLayout();
+QLabel *labelDockWid = new QLabel(tr("Una label"));
+layoutDockWid->addWidget(labelDockWid);
+QTextEdit *textEditDockWid = new QTextEdit();
+layoutDockWid->addWidget(textEditDockWid);
+widDockWid->setLayout(layoutDockWid);
+dock->setWidget(widDockWid);
+
+http://www.qtcentre.org/archive/index.php/t-49291.html
+*/

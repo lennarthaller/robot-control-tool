@@ -57,7 +57,7 @@ uint16_t CNetwork::GetData () {
 	m_nBytes ++;
 	i[1] = m_chBuffer[m_nBytes];
 	m_nBytes ++;
-	u = ((i[1] << 8 ) | i[0]);
+	u = ((i[1] << 8 ) | i[0])-1024;
 	return u;
 }
 
