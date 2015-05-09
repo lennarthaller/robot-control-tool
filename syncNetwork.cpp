@@ -29,7 +29,12 @@ void SyncNetwork::UpdateData () {
 			m_nOdometryticks[i] = Network.GetData ();
 		}
 		for (int i=0; i<100; i++) {
-			m_nScannerData[i] = Network.GetData ();
+			int u = Network.GetData ();
+			if (u > 1000) {
+				m_nScannerData[i] = 0;
+			}else{
+				m_nScannerData[i] = u;
+			}
 		}
 		for (int i=0; i<4; i++) {
 			m_nMotorPower[i] = Network.GetData ();

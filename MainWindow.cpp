@@ -10,16 +10,16 @@ MainWindow::MainWindow()
 	textEdit->setReadOnly (true);
     setCentralWidget(textEdit);
 
+	pixmap = new QPixmap (800, 800);
 	label = new QLabel(this);
-	label->setPixmap(pixmap);
-
-    createActions();
-	createMenus();
-	createDockWindow ();
 
 	if (Network.InitNetwork () == 1) {
 		QMessageBox::critical(this, tr("System error"), tr("Failed to initialize the Network ressources!"));
 	}
+
+	createActions();
+	createMenus();
+	createDockWindow ();
 
     setWindowTitle(tr("Robot Control Tool"));
 }
@@ -140,6 +140,16 @@ void MainWindow::DisplayScan () {
 		textEdit->insertPlainText ("\n");
 		textEdit->moveCursor (QTextCursor::End);
 	}
+
+	QPainter *paint = new QPainter (pixmap);
+	double x, y;
+
+	for (int i=0; i<100;i++) {
+		x = ((*(Network.GetScannerData()+i))/23 * cosd (1.8 * i))-4;
+		y = ((*(Network.GetScannerData()+i))/23 * sind (1.8 * i))-4;
+		paint->fillRect (400 + static_cast<int>(x), 600 - static_cast<int>(y), 8, 8, QColor (0,0,0)); 
+	}
+	label->setPixmap(*pixmap);
 }
 
 void MainWindow::DisplayMotorData () {
@@ -207,24 +217,14 @@ void MainWindow::createDockWindow() {
 	dock->hide();
 } 
 
+double MainWindow::sind(double angle)
+{
+    double angleradians = angle * M_PI / 180.0f;
+    return sin(angleradians) * 180.0f / M_PI;
+}
 
-/*
-#include "mainwindow.h"
-#include <QtGui/QWidget>
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QDockWidget>
-#include <QtGui/QLabel>
-#include <QtGui/QTextEdit>
-
-// container QWidget to put QVBoxLayout containing QLabel and QTextEdit
-QWidget *widDockWid = new QWidget(dock);
-QVBoxLayout *layoutDockWid = new QVBoxLayout();
-QLabel *labelDockWid = new QLabel(tr("Una label"));
-layoutDockWid->addWidget(labelDockWid);
-QTextEdit *textEditDockWid = new QTextEdit();
-layoutDockWid->addWidget(textEditDockWid);
-widDockWid->setLayout(layoutDockWid);
-dock->setWidget(widDockWid);
-
-http://www.qtcentre.org/archive/index.php/t-49291.html
-*/
+double MainWindow::cosd(double angle)
+{
+    double angleradians = angle * M_PI / 180.0f;
+    return cos(angleradians) * 180.0f / M_PI;
+}

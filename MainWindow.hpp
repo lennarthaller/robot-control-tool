@@ -4,6 +4,7 @@
 #include <QtGui\QtGui>
 #include <QPainter>
 #include "SyncNetwork.hpp"
+#include <math.h>
 //#include "Render.hpp"
 #define  UPDATEFREQUENCY 100
 
@@ -30,12 +31,15 @@ private:
     void createMenus();
     void createDockWindow();
 
+	double sind (double angle);
+	double cosd (double angle);
+
 	bool bConnected;
 
 	QTimer timer;
 
 	QLabel *label;
-	QPixmap pixmap;
+	QPixmap *pixmap;
 	QDockWidget *dock;
 
     QTextEdit *textEdit;
