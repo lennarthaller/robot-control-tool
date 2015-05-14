@@ -5,7 +5,7 @@
 #include <QPainter>
 #include "SyncNetwork.hpp"
 #include <math.h>
-#define  UPDATEFREQUENCY 100
+#define  UPDATEFREQUENCY 20
 
 class MainWindow : public QMainWindow
 {
@@ -47,6 +47,9 @@ private:
 	QAction *qconnectAct;
     QAction *aboutAct;
     QAction *quitAct;
+
+	QMenu *Settings;
+	QAction *qshowCDDAct;
 
 	QMenu *ShowData;
 	QAction *qshowScanAct;

@@ -50,6 +50,11 @@ void MainWindow::createActions()
 	qshowGeneralAct->setStatusTip(tr("Show general data"));
 	connect(qshowGeneralAct, SIGNAL(triggered()), this, SLOT(ShowGeneralData()));
 
+	qshowCDDAct = new QAction(tr("&Show CDD"), this);
+	qshowCDDAct->setStatusTip(tr("Show Calculated driving direction"));
+	qshowCDDAct->setCheckable(true);
+	connect (qshowCDDAct, SIGNAL (changed()), this, SLOT (toggle()));
+
     quitAct = new QAction(tr("&Quit"), this);
     quitAct->setShortcuts(QKeySequence::Quit);
     quitAct->setStatusTip(tr("Quit the application"));
@@ -70,6 +75,9 @@ void MainWindow::createMenus()
 	ShowData->addAction (qshowScanAct);
 	ShowData->addAction (qshowMotorDataAct);
 	ShowData->addAction (qshowGeneralAct);
+
+	Settings = menuBar()->addMenu (tr("&Settings"));
+	Settings->addAction (qshowCDDAct);
 
     GeneralMenu = menuBar()->addMenu(tr("&General"));
 	GeneralMenu->addAction(qconnectAct);
@@ -126,6 +134,9 @@ void MainWindow::ShowGeneralData () {
 
 void MainWindow::DisplayScan () {
 	Network.UpdateData ();
+
+	if (Network.GetWasUpdated () == true) {
+
 	textEdit->clear();
 
 	for (int i=0; i<100; i++) {
@@ -141,11 +152,10 @@ void MainWindow::DisplayScan () {
 		textEdit->moveCursor (QTextCursor::End);
 	}
 
-	//label->clear();
-	//pixmap->fill();
-
 	QPixmap *pixmap = new QPixmap (800, 800);
 	QPainter *paint = new QPainter (pixmap);
+	QPen pen(Qt::green, 3, Qt::DashDotLine, Qt::RoundCap, Qt::RoundJoin);
+
 	double x, y;
 
 	for (int i=0; i<100;i++) {
@@ -153,7 +163,17 @@ void MainWindow::DisplayScan () {
 		y = ((*(Network.GetScannerData()+i))/23 * sind (1.8 * i))-4;
 		paint->fillRect (400 + static_cast<int>(x), 600 - static_cast<int>(y), 8, 8, QColor (0,0,0)); 
 	}
+
+	if (qshowCDDAct->isChecked() == true) {//Draw calculated driving direction
+	paint->setPen (pen);
+	x = (cosd (Network.GetCalculatedDrivingDirection()+90) * 200) / 23;
+	y = (sind (Network.GetCalculatedDrivingDirection()+90) * 200) / 23;
+	paint->drawLine (400, 600, x+400, 600-y);
+	}
+
 	label->setPixmap(*pixmap);
+	Network.SetWasUpdated (false);
+	}
 }
 
 void MainWindow::DisplayMotorData () {
@@ -206,9 +226,14 @@ void MainWindow::DisplayGeneralData () {
 	textEdit->insertPlainText (QString::number(Network.GetVoltage()));
 	textEdit->moveCursor (QTextCursor::End);
 	
-	textEdit->append ("\nMain loop ticks per second "); 
+	textEdit->append ("Main loop ticks per second "); 
 	textEdit->moveCursor (QTextCursor::End);
 	textEdit->insertPlainText (QString::number(Network.GetLoopTicks()));
+	textEdit->moveCursor (QTextCursor::End);
+
+	textEdit->append ("\n\nCalculated driving direction "); 
+	textEdit->moveCursor (QTextCursor::End);
+	textEdit->insertPlainText (QString::number(Network.GetCalculatedDrivingDirection()));
 	textEdit->moveCursor (QTextCursor::End);
 }
 
