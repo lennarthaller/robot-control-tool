@@ -17,6 +17,8 @@ public:
 	float GetTargetDrivingDirection () {return m_fTargetDrivingDirection;}
 	float GetVoltage () {return m_fVoltage;}
 	int	 GetLoopTicks () {return m_nLoopTicks;}
+	bool GetWasUpdated () {return m_bWasUpdated;}
+	void SetWasUpdated (bool bUpdated) {m_bWasUpdated = bUpdated;}
 
 private:
 	CNetwork Network;
@@ -28,6 +30,8 @@ private:
 	float m_fTargetDrivingDirection;
 	float m_fVoltage;
 	int m_nLoopTicks;
+
+	bool m_bWasUpdated;
 };
 
 #endif

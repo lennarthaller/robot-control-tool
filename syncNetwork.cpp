@@ -15,6 +15,8 @@ int SyncNetwork::InitNetwork () {
 	m_fVoltage = 0.0;
 	m_nLoopTicks = 0;
 
+	m_bWasUpdated = false;
+
 	return (Network.NetworkInit());
 }
 
@@ -45,11 +47,15 @@ void SyncNetwork::UpdateData () {
 		}
 		m_fCalculatedDrivingDirection = (static_cast<float> (Network.GetData ()));
 		m_fCalculatedDrivingDirection /= 100;
+		m_fCalculatedDrivingDirection -= 90;
 		m_fTargetDrivingDirection = (static_cast<float> (Network.GetData ()));
 		m_fTargetDrivingDirection /= 100;
+		m_fTargetDrivingDirection -= 90;
 		m_fVoltage = (static_cast<float> (Network.GetData ()));
 		m_fVoltage /= 100;
 		m_nLoopTicks = (Network.GetData ()*10000);
+
+		m_bWasUpdated = true;
 	 }
 
 	 //Network.Clear();
