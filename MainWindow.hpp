@@ -5,7 +5,6 @@
 #include <QPainter>
 #include "SyncNetwork.hpp"
 #include <math.h>
-//#include "Render.hpp"
 #define  UPDATEFREQUENCY 100
 
 class MainWindow : public QMainWindow
@@ -39,7 +38,7 @@ private:
 	QTimer timer;
 
 	QLabel *label;
-	QPixmap *pixmap;
+	//QPixmap *pixmap;
 	QDockWidget *dock;
 
     QTextEdit *textEdit;

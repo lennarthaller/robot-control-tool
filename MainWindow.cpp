@@ -10,7 +10,7 @@ MainWindow::MainWindow()
 	textEdit->setReadOnly (true);
     setCentralWidget(textEdit);
 
-	pixmap = new QPixmap (800, 800);
+	//pixmap = new QPixmap (800, 800);
 	label = new QLabel(this);
 
 	if (Network.InitNetwork () == 1) {
@@ -141,11 +141,15 @@ void MainWindow::DisplayScan () {
 		textEdit->moveCursor (QTextCursor::End);
 	}
 
+	//label->clear();
+	//pixmap->fill();
+
+	QPixmap *pixmap = new QPixmap (800, 800);
 	QPainter *paint = new QPainter (pixmap);
 	double x, y;
 
 	for (int i=0; i<100;i++) {
-		x = ((*(Network.GetScannerData()+i))/23 * cosd (1.8 * i))-4;
+		x = ((*(Network.GetScannerData()+i))/23 * cosd (1.8 * i))-4; //divide by 23
 		y = ((*(Network.GetScannerData()+i))/23 * sind (1.8 * i))-4;
 		paint->fillRect (400 + static_cast<int>(x), 600 - static_cast<int>(y), 8, 8, QColor (0,0,0)); 
 	}
@@ -214,6 +218,7 @@ void MainWindow::createDockWindow() {
     dock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
     dock->setWidget(label);
     addDockWidget(Qt::RightDockWidgetArea, dock);
+	
 	dock->hide();
 } 
 
