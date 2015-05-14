@@ -30,10 +30,14 @@ void SyncNetwork::UpdateData () {
 		}
 		for (int i=0; i<100; i++) {
 			int u = Network.GetData ();
-			if (u > 1000) {
-				m_nScannerData[i] = 0;
+			if (u > 5000) {
+				m_nScannerData[i] = 150;
 			}else{
-				m_nScannerData[i] = u;
+				if (u == 2500) {
+					m_nScannerData[i] = 0;
+				}else{
+					m_nScannerData[i] = u;
+				}
 			}
 		}
 		for (int i=0; i<4; i++) {
@@ -47,4 +51,6 @@ void SyncNetwork::UpdateData () {
 		m_fVoltage /= 100;
 		m_nLoopTicks = (Network.GetData ()*10000);
 	 }
+
+	 //Network.Clear();
 }

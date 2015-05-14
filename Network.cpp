@@ -41,6 +41,10 @@ int CNetwork::Connect () {
 }
 
 int CNetwork::Recv (void) {
+	for (int i=0; i<BUF_SIZE; i++) {
+			m_chBuffer[i] = 0;
+		}
+
 	m_nRecvdBytes = recv (m_nOwnSocket, m_chBuffer, sizeof(m_chBuffer) -1, 0);
 	if (m_nRecvdBytes == SOCKET_ERROR) {
 		return -1;
