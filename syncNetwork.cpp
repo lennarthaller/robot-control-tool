@@ -31,15 +31,10 @@ void SyncNetwork::UpdateData () {
 			m_nOdometryticks[i] = Network.GetData ();
 		}
 		for (int i=0; i<100; i++) {
-			int u = Network.GetData ();
-			if (u > 5000) {
+			m_nScannerData[i] = Network.GetData ();
+
+			if (m_nScannerData[i] > 150) {
 				m_nScannerData[i] = 150;
-			}else{
-				if (u == 2500) {
-					m_nScannerData[i] = 0;
-				}else{
-					m_nScannerData[i] = u;
-				}
 			}
 		}
 		for (int i=0; i<4; i++) {
