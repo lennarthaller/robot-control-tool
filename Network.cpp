@@ -1,7 +1,7 @@
 #include "Network.hpp"
 
 CNetwork::CNetwork (void) {
-	AdressFromServer.sin_addr.s_addr = inet_addr ("192.168.1.87");
+	AdressFromServer.sin_addr.s_addr = inet_addr ("192.168.100.72");
 	AdressFromServer.sin_port = htons(7000);
 	AdressFromServer.sin_family = AF_INET;
 	
@@ -45,7 +45,7 @@ int CNetwork::Recv (void) {
 			m_chBuffer[i] = 0;
 		}
 
-	m_nRecvdBytes = recv (m_nOwnSocket, m_chBuffer, sizeof(m_chBuffer) -1, 0);
+	m_nRecvdBytes = recv (m_nOwnSocket, m_chBuffer, BUF_SIZE, 0);
 	if (m_nRecvdBytes == SOCKET_ERROR) {
 		return -1;
 	}else{
