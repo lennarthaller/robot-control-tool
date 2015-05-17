@@ -38,7 +38,6 @@ private:
 	QTimer timer;
 
 	QLabel *label;
-	//QPixmap *pixmap;
 	QDockWidget *dock;
 
     QTextEdit *textEdit;

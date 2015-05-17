@@ -10,7 +10,6 @@ MainWindow::MainWindow()
 	textEdit->setReadOnly (true);
     setCentralWidget(textEdit);
 
-	//pixmap = new QPixmap (800, 800);
 	label = new QLabel(this);
 
 	if (Network.InitNetwork () == 1) {
@@ -137,42 +136,42 @@ void MainWindow::DisplayScan () {
 
 	if (Network.GetWasUpdated () == true) {
 
-	textEdit->clear();
+		textEdit->clear();
 
-	for (int i=0; i<100; i++) {
-		textEdit->insertPlainText ("Messung ");
-		textEdit->moveCursor (QTextCursor::End);
-		textEdit->insertPlainText (QString::number(i));
-		textEdit->moveCursor (QTextCursor::End);
-		textEdit->insertPlainText (":   ");
-		textEdit->moveCursor (QTextCursor::End);
-		textEdit->insertPlainText (QString::number(*(Network.GetScannerData()+i)));
-		textEdit->moveCursor (QTextCursor::End);
-		textEdit->insertPlainText ("\n");
-		textEdit->moveCursor (QTextCursor::End);
-	}
+		for (int i=0; i<100; i++) {
+			textEdit->insertPlainText ("Messung ");
+			textEdit->moveCursor (QTextCursor::End);
+			textEdit->insertPlainText (QString::number(i));
+			textEdit->moveCursor (QTextCursor::End);
+			textEdit->insertPlainText (":   ");
+			textEdit->moveCursor (QTextCursor::End);
+			textEdit->insertPlainText (QString::number(*(Network.GetScannerData()+i)));
+			textEdit->moveCursor (QTextCursor::End);
+			textEdit->insertPlainText ("\n");
+			textEdit->moveCursor (QTextCursor::End);
+		}
 
-	QPixmap *pixmap = new QPixmap (800, 800);
-	QPainter *paint = new QPainter (pixmap);
-	QPen pen(Qt::green, 3, Qt::DashDotLine, Qt::RoundCap, Qt::RoundJoin);
+		QPixmap *pixmap = new QPixmap (800, 800);
+		QPainter *paint = new QPainter (pixmap);
 
-	double x, y;
+		double x, y;
 
-	for (int i=0; i<100;i++) {
-		x = ((*(Network.GetScannerData()+i))/23 * cosd (1.8 * i))-4; //divide by 23
-		y = ((*(Network.GetScannerData()+i))/23 * sind (1.8 * i))-4;
-		paint->fillRect (400 + static_cast<int>(x), 600 - static_cast<int>(y), 8, 8, QColor (0,0,0)); 
-	}
+		for (int i=0; i<100;i++) {
+			x = ((*(Network.GetScannerData()+i))/23 * cosd (1.8 * i))-4; //divide by 23
+			y = ((*(Network.GetScannerData()+i))/23 * sind (1.8 * i))-4;
+			paint->fillRect (400 + static_cast<int>(x), 600 - static_cast<int>(y), 8, 8, QColor (0,0,0)); 
+		}
 
-	if (qshowCDDAct->isChecked() == true) {//Draw calculated driving direction
-	paint->setPen (pen);
-	x = (cosd (Network.GetCalculatedDrivingDirection()+90) * 200) / 23;
-	y = (sind (Network.GetCalculatedDrivingDirection()+90) * 200) / 23;
-	paint->drawLine (400, 600, x+400, 600-y);
-	}
+		if (qshowCDDAct->isChecked() == true) {//Draw calculated driving direction
+			QPen pen(Qt::green, 3, Qt::DashDotLine, Qt::RoundCap, Qt::RoundJoin);
+			paint->setPen (pen);
+			x = (cosd (Network.GetCalculatedDrivingDirection()+90) * 8.7);
+			y = (sind (Network.GetCalculatedDrivingDirection()+90) * 8.7);
+			paint->drawLine (400, 600, x+400, 600-y);
+		}
 
-	label->setPixmap(*pixmap);
-	Network.SetWasUpdated (false);
+		label->setPixmap(*pixmap);
+		Network.SetWasUpdated (false);
 	}
 }
 
