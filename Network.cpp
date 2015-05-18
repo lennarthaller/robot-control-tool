@@ -55,7 +55,7 @@ int CNetwork::Recv (void) {
 }
 
 uint16_t CNetwork::GetData () {
-	uint16_t i[2];
+	uint8_t i[2];
 	uint16_t u = 0;
 	i[0] = m_chBuffer[m_nBytes];
 	m_nBytes ++;
