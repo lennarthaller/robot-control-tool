@@ -214,6 +214,23 @@ void MainWindow::DisplayMotorData () {
 	textEdit->moveCursor (QTextCursor::End);
 	textEdit->insertPlainText (QString::number(*(Network.GetOdometryTicks())));
 	textEdit->moveCursor (QTextCursor::End);
+
+	textEdit->append ("\n\n\n\n\n\n\n");
+
+	textEdit->insertPlainText ("X Pos from Odometry: ");
+	textEdit->moveCursor (QTextCursor::End);
+	textEdit->insertPlainText (QString::number(Network.OdometryPosition()->nX));
+	textEdit->moveCursor (QTextCursor::End);
+	
+	textEdit->append ("Y Pos from Odometry: ");
+	textEdit->moveCursor (QTextCursor::End);
+	textEdit->insertPlainText (QString::number(Network.OdometryPosition()->nY));
+	textEdit->moveCursor (QTextCursor::End);
+	
+	textEdit->append ("Theta from Odometry: ");
+	textEdit->moveCursor (QTextCursor::End);
+	textEdit->insertPlainText (QString::number(Network.OdometryPosition()->fTheta));
+	textEdit->moveCursor (QTextCursor::End);
 }
 
 void MainWindow::DisplayGeneralData () {

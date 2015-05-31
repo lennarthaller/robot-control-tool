@@ -5,6 +5,27 @@
 
 class SyncNetwork 
 {
+private:
+	CNetwork Network;
+
+	typedef struct {
+		int nX;
+		int nY;
+		float fTheta;
+	} Position;
+
+	Position OdometryPositionData;
+	int m_nScannerData[100];
+	int m_nOdometryticks[4];
+	int m_nMotorPower[4];
+	float m_fCalculatedDrivingDirection;
+	float m_fTargetDrivingDirection;
+	float m_fVoltage;
+	int m_nLoopTicks;
+
+	bool m_bWasUpdated;
+
+
 public:
 	int InitNetwork ();
 	int Connect ();
@@ -19,19 +40,8 @@ public:
 	int	 GetLoopTicks () {return m_nLoopTicks;}
 	bool GetWasUpdated () {return m_bWasUpdated;}
 	void SetWasUpdated (bool bUpdated) {m_bWasUpdated = bUpdated;}
+	Position* OdometryPosition () {return &OdometryPositionData;}
 
-private:
-	CNetwork Network;
-
-	int m_nScannerData[100];
-	int m_nOdometryticks[4];
-	int m_nMotorPower[4];
-	float m_fCalculatedDrivingDirection;
-	float m_fTargetDrivingDirection;
-	float m_fVoltage;
-	int m_nLoopTicks;
-
-	bool m_bWasUpdated;
 };
 
 #endif

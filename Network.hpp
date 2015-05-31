@@ -3,7 +3,7 @@
 #include <WS2tcpip.h>
 #include <WinSock2.h>
 
-#define BUF_SIZE 512 //224 benötigt(?)
+#define BUF_SIZE 4096 //224 benötigt(?)
 
 class CNetwork
 {
