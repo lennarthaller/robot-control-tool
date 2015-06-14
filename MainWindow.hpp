@@ -24,6 +24,7 @@ private slots:
 	void DisplayScan ();
 	void DisplayMotorData ();
 	void DisplayGeneralData ();
+	void UpdateData ();
 
 private:
     void createActions();
@@ -35,6 +36,7 @@ private:
 
 	bool bConnected;
 
+	QTimer UpdateTimer;
 	QTimer timer;
 
 	QLabel *label;

@@ -90,7 +90,8 @@ void MainWindow::ConnectToRobot () {
 			QMessageBox::critical(this, tr("Network error"), tr("Failed to connect to the robot!"));
 		}else{
 			QMessageBox::information(this, tr("Connection status"), tr("You are now connected to the robot."));
-				timer.start(UPDATEFREQUENCY);
+				UpdateTimer.start(UPDATEFREQUENCY);
+				connect(&UpdateTimer, SIGNAL (timeout()), this, SLOT (UpdateData()));
 				bConnected = true;
 		}
 	}else{
@@ -100,6 +101,7 @@ void MainWindow::ConnectToRobot () {
 
 void MainWindow::ShowScan () {
 	if (bConnected == true) {
+		timer.start(1000);
 		disconnect(&timer, SIGNAL (timeout()), this, SLOT (DisplayMotorData()));
 		disconnect(&timer, SIGNAL (timeout()), this, SLOT (DisplayGeneralData()));
 		connect(&timer, SIGNAL (timeout()), this, SLOT (DisplayScan()));
@@ -110,7 +112,8 @@ void MainWindow::ShowScan () {
 }
 
 void MainWindow::ShowMotorData () {
-		if (bConnected == true) {
+	if (bConnected == true) {
+		timer.start(20);
 		disconnect(&timer, SIGNAL (timeout()), this, SLOT (DisplayScan()));
 		disconnect(&timer, SIGNAL (timeout()), this, SLOT (DisplayGeneralData()));
 		connect(&timer, SIGNAL (timeout()), this, SLOT (DisplayMotorData()));
@@ -122,6 +125,7 @@ void MainWindow::ShowMotorData () {
 
 void MainWindow::ShowGeneralData () {
 		if (bConnected == true) {
+		timer.start(20);
 		disconnect(&timer, SIGNAL (timeout()), this, SLOT (DisplayScan()));
 		disconnect(&timer, SIGNAL (timeout()), this, SLOT (DisplayMotorData()));
 		connect(&timer, SIGNAL (timeout()), this, SLOT (DisplayGeneralData()));
@@ -132,7 +136,6 @@ void MainWindow::ShowGeneralData () {
 }
 
 void MainWindow::DisplayScan () {
-	Network.UpdateData ();
 
 	if (Network.GetWasUpdated () == true) {
 
@@ -151,23 +154,23 @@ void MainWindow::DisplayScan () {
 			textEdit->moveCursor (QTextCursor::End);
 		}
 
-		QPixmap *pixmap = new QPixmap (800, 800);
+		QPixmap *pixmap = new QPixmap (1000, 1000);
 		QPainter *paint = new QPainter (pixmap);
 
 		double x, y;
 
 		for (int i=0; i<100;i++) {
-			x = ((*(Network.GetScannerData()+i))/23 * cosd (1.8 * i))-4; //divide by 23
-			y = ((*(Network.GetScannerData()+i))/23 * sind (1.8 * i))-4;
-			paint->fillRect (400 + static_cast<int>(x), 600 - static_cast<int>(y), 8, 8, QColor (0,0,0)); 
+			x = (((*(Network.GetScannerData()+i)) * cosd (1.8 * i)) / 23)-4; //divide by 23
+			y = (((*(Network.GetScannerData()+i)) * sind (1.8 * i)) / 23)-4;
+			paint->fillRect (500 + static_cast<int>(x), 800 - static_cast<int>(y), 8, 8, QColor (0,0,0)); 
 		}
 
 		if (qshowCDDAct->isChecked() == true) {//Draw calculated driving direction
 			QPen pen(Qt::green, 3, Qt::DashDotLine, Qt::RoundCap, Qt::RoundJoin);
 			paint->setPen (pen);
-			x = (cosd (Network.GetCalculatedDrivingDirection()+90) * 8.7);
-			y = (sind (Network.GetCalculatedDrivingDirection()+90) * 8.7);
-			paint->drawLine (400, 600, x+400, 600-y);
+			x = (cosd (Network.GetCalculatedDrivingDirection()+90) * 0.2); // * 8.7
+			y = (sind (Network.GetCalculatedDrivingDirection()+90) * 0.2);
+			paint->drawLine (500, 800, x+500, 800-y);
 		}
 
 		label->setPixmap(*pixmap);
@@ -176,7 +179,6 @@ void MainWindow::DisplayScan () {
 }
 
 void MainWindow::DisplayMotorData () {
-	Network.UpdateData ();
 	textEdit->clear();
 
 	textEdit->setText ("Motor 3: ");
@@ -234,7 +236,6 @@ void MainWindow::DisplayMotorData () {
 }
 
 void MainWindow::DisplayGeneralData () {
-	Network.UpdateData ();
 	textEdit->clear();
 
 	textEdit->setText ("Operating Voltage "); 
@@ -273,4 +274,8 @@ double MainWindow::cosd(double angle)
 {
     double angleradians = angle * M_PI / 180.0f;
     return cos(angleradians) * 180.0f / M_PI;
+}
+
+void  MainWindow::UpdateData () {
+	Network.UpdateData ();
 }
