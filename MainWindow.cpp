@@ -168,8 +168,8 @@ void MainWindow::DisplayScan () {
 		if (qshowCDDAct->isChecked() == true) {//Draw calculated driving direction
 			QPen pen(Qt::green, 3, Qt::DashDotLine, Qt::RoundCap, Qt::RoundJoin);
 			paint->setPen (pen);
-			x = (cosd (Network.GetCalculatedDrivingDirection()+90) * 0.2); // * 8.7
-			y = (sind (Network.GetCalculatedDrivingDirection()+90) * 0.2);
+			x = (cosd (Network.GetCalculatedDrivingDirection()+90) * 10); // * 8.7
+			y = (sind (Network.GetCalculatedDrivingDirection()+90) * 10);
 			paint->drawLine (500, 800, x+500, 800-y);
 		}
 
