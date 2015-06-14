@@ -32,10 +32,6 @@ void SyncNetwork::UpdateData () {
 		}
 		for (int i=0; i<100; i++) {
 			m_nScannerData[i] = Network.GetData ();
-
-			if (m_nScannerData[i] > 150) {
-				m_nScannerData[i] = 150;
-			}
 		}
 		for (int i=0; i<4; i++) {
 			m_nMotorPower[i] = Network.GetData ();
