@@ -1,7 +1,7 @@
 #include "SyncNetwork.hpp"
 
 int SyncNetwork::InitNetwork () {
-	for (int i=0; i<100; i++) {
+	for (int i=0; i<271; i++) {
 		m_nScannerData[i] = 0;
 	}
 	for (int i=0; i<4; i++) {
@@ -30,8 +30,8 @@ void SyncNetwork::UpdateData () {
 		 for (int i=0; i<4; i++) {
 			m_nOdometryticks[i] = Network.GetData ();
 		}
-		for (int i=0; i<100; i++) {
-			m_nScannerData[i] = Network.GetData ();
+		for (int i=0; i<271; i++) {
+			m_nScannerData[i] = static_cast <int> (Network.GetData () / 10.0);
 		}
 		for (int i=0; i<4; i++) {
 			m_nMotorPower[i] = Network.GetData ();

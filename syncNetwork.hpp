@@ -15,7 +15,7 @@ private:
 	} Position;
 
 	Position OdometryPositionData;
-	int m_nScannerData[100];
+	int m_nScannerData[271];
 	int m_nOdometryticks[4];
 	int m_nMotorPower[4];
 	float m_fCalculatedDrivingDirection;
