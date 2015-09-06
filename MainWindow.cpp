@@ -141,7 +141,7 @@ void MainWindow::DisplayScan () {
 
 		textEdit->clear();
 
-		for (int i=0; i<100; i++) {
+		for (int i=0; i<271; i++) {
 			textEdit->insertPlainText ("Messung ");
 			textEdit->moveCursor (QTextCursor::End);
 			textEdit->insertPlainText (QString::number(i));
@@ -159,9 +159,9 @@ void MainWindow::DisplayScan () {
 
 		double x, y;
 
-		for (int i=0; i<100;i++) {
-			x = (((*(Network.GetScannerData()+i)) * cosd (1.8 * i)) / 23)-4; //divide by 23
-			y = (((*(Network.GetScannerData()+i)) * sind (1.8 * i)) / 23)-4;
+		for (int i=0; i<271;i++) {
+			x = (((*(Network.GetScannerData()+i)) * cosd (i-45)) / 23)-4; //divide by 23
+			y = (((*(Network.GetScannerData()+i)) * sind (i-45)) / 23)-4;
 			paint->fillRect (500 + static_cast<int>(x), 800 - static_cast<int>(y), 8, 8, QColor (0,0,0)); 
 		}
 
