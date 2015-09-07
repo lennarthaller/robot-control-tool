@@ -51,6 +51,7 @@ private:
 
 	QMenu *Settings;
 	QAction *qshowCDDAct;
+	QAction *qshowOriginOfScanAct;
 
 	QMenu *ShowData;
 	QAction *qshowScanAct;

@@ -54,6 +54,11 @@ void MainWindow::createActions()
 	qshowCDDAct->setCheckable(true);
 	connect (qshowCDDAct, SIGNAL (changed()), this, SLOT (toggle()));
 
+	qshowOriginOfScanAct = new QAction(tr("&Show origin of scan"), this);
+	qshowOriginOfScanAct->setStatusTip(tr("Display the origin of the laser scan"));
+	qshowOriginOfScanAct->setCheckable(true);
+	connect (qshowOriginOfScanAct, SIGNAL (changed()), this, SLOT (toggle()));
+
     quitAct = new QAction(tr("&Quit"), this);
     quitAct->setShortcuts(QKeySequence::Quit);
     quitAct->setStatusTip(tr("Quit the application"));
@@ -77,6 +82,7 @@ void MainWindow::createMenus()
 
 	Settings = menuBar()->addMenu (tr("&Settings"));
 	Settings->addAction (qshowCDDAct);
+	Settings->addAction (qshowOriginOfScanAct);
 
     GeneralMenu = menuBar()->addMenu(tr("&General"));
 	GeneralMenu->addAction(qconnectAct);
@@ -101,7 +107,7 @@ void MainWindow::ConnectToRobot () {
 
 void MainWindow::ShowScan () {
 	if (bConnected == true) {
-		timer.start(1000);
+		timer.start(50);
 		disconnect(&timer, SIGNAL (timeout()), this, SLOT (DisplayMotorData()));
 		disconnect(&timer, SIGNAL (timeout()), this, SLOT (DisplayGeneralData()));
 		connect(&timer, SIGNAL (timeout()), this, SLOT (DisplayScan()));
@@ -159,13 +165,19 @@ void MainWindow::DisplayScan () {
 
 		double x, y;
 
-		for (int i=0; i<271;i++) {
-			x = (((*(Network.GetScannerData()+i)) * cosd (i-45)) / 23)-4; //divide by 23
-			y = (((*(Network.GetScannerData()+i)) * sind (i-45)) / 23)-4;
-			paint->fillRect (500 + static_cast<int>(x), 800 - static_cast<int>(y), 8, 8, QColor (0,0,0)); 
+		for (int i=0; i<271;i++) { //draw data points
+			if (*(Network.GetScannerData()+i) != 0) { //only draw the data point if its != 0
+				x = (((*(Network.GetScannerData()+i)) * cosd (i-45)) / 23)-4; //divide by 23
+				y = (((*(Network.GetScannerData()+i)) * sind (i-45)) / 23)-4;
+				paint->fillRect (500 + static_cast<int>(x), 800 - static_cast<int>(y), 8, 8, QColor (0,0,0)); 
+			}
 		}
 
-		if (qshowCDDAct->isChecked() == true) {//Draw calculated driving direction
+		if (qshowOriginOfScanAct->isChecked() == true) {//Draw origin if selected by the user
+			paint->fillRect (500 -8, 800 - 8, 16, 16, QColor (255,0,0)); 
+		}
+
+		if (qshowCDDAct->isChecked() == true) {//Draw calculated driving direction if selected by the user
 			QPen pen(Qt::green, 3, Qt::DashDotLine, Qt::RoundCap, Qt::RoundJoin);
 			paint->setPen (pen);
 			x = (cosd (Network.GetCalculatedDrivingDirection()+90) * 10); // * 8.7
