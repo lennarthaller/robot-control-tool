@@ -59,6 +59,8 @@ private:
 	QAction *qshowGeneralAct;
 
 	SyncNetwork Network;
+
+	QPixmap *pixmap;
 };
 
 #endif

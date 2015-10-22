@@ -20,6 +20,8 @@ MainWindow::MainWindow()
 	createMenus();
 	createDockWindow ();
 
+	pixmap = new QPixmap (1000, 1000);
+
     setWindowTitle(tr("Robot Control Tool"));
 }
 
@@ -141,53 +143,8 @@ void MainWindow::ShowGeneralData () {
 	}
 }
 
-void MainWindow::DisplayScan () {
+extern void aFunction (void) {
 
-	if (Network.GetWasUpdated () == true) {
-
-		textEdit->clear();
-
-		for (int i=0; i<271; i++) {
-			textEdit->insertPlainText ("Messung ");
-			textEdit->moveCursor (QTextCursor::End);
-			textEdit->insertPlainText (QString::number(i));
-			textEdit->moveCursor (QTextCursor::End);
-			textEdit->insertPlainText (":   ");
-			textEdit->moveCursor (QTextCursor::End);
-			textEdit->insertPlainText (QString::number(*(Network.GetScannerData()+i)));
-			textEdit->moveCursor (QTextCursor::End);
-			textEdit->insertPlainText ("\n");
-			textEdit->moveCursor (QTextCursor::End);
-		}
-
-		QPixmap *pixmap = new QPixmap (1000, 1000);
-		QPainter *paint = new QPainter (pixmap);
-
-		double x, y;
-
-		for (int i=0; i<271;i++) { //draw data points
-			if (*(Network.GetScannerData()+i) != 0) { //only draw the data point if its != 0
-				x = (((*(Network.GetScannerData()+i)) * cosd (i-45)) / 23)-4; //divide by 23
-				y = (((*(Network.GetScannerData()+i)) * sind (i-45)) / 23)-4;
-				paint->fillRect (500 + static_cast<int>(x), 800 - static_cast<int>(y), 8, 8, QColor (0,0,0)); 
-			}
-		}
-
-		if (qshowOriginOfScanAct->isChecked() == true) {//Draw origin if selected by the user
-			paint->fillRect (500 -8, 800 - 8, 16, 16, QColor (255,0,0)); 
-		}
-
-		if (qshowCDDAct->isChecked() == true) {//Draw calculated driving direction if selected by the user
-			QPen pen(Qt::green, 3, Qt::DashDotLine, Qt::RoundCap, Qt::RoundJoin);
-			paint->setPen (pen);
-			x = (cosd (Network.GetCalculatedDrivingDirection()+90) * 10); // * 8.7
-			y = (sind (Network.GetCalculatedDrivingDirection()+90) * 10);
-			paint->drawLine (500, 800, x+500, 800-y);
-		}
-
-		label->setPixmap(*pixmap);
-		Network.SetWasUpdated (false);
-	}
 }
 
 void MainWindow::DisplayMotorData () {
@@ -275,6 +232,61 @@ void MainWindow::createDockWindow() {
 	
 	dock->hide();
 } 
+
+void MainWindow::DisplayScan () {
+	if (Network.GetWasUpdated() == true) {
+
+		textEdit->clear();
+		/*
+		for (int i=0; i<271; i++) {
+			textEdit->insertPlainText ("Messung ");
+			textEdit->moveCursor (QTextCursor::End);
+			textEdit->insertPlainText (QString::number(i));
+			textEdit->moveCursor (QTextCursor::End);
+			textEdit->insertPlainText (":   ");
+			textEdit->moveCursor (QTextCursor::End);
+			textEdit->insertPlainText (QString::number(*(Network.GetScannerData()+i)));
+			textEdit->moveCursor (QTextCursor::End);
+			textEdit->insertPlainText ("\n");
+			textEdit->moveCursor (QTextCursor::End);
+		}
+		 */
+		
+		pixmap->fill (QColor (160, 160, 160, 255));
+		QPainter *paint = new QPainter (pixmap);
+
+
+
+		double x, y;
+
+		for (int i=0; i<271;i++) { //draw data points
+			if (*(Network.GetScannerData()+i) != 0) { //only draw the data point if its != 0
+				x = (((*(Network.GetScannerData()+i)) * cosd (i-45)) / 23)-4; //divide by 23
+				y = (((*(Network.GetScannerData()+i)) * sind (i-45)) / 23)-4;
+				paint->fillRect (500 + static_cast<int>(x), 800 - static_cast<int>(y), 8, 8, QColor (0,0,0)); 
+			}
+		}
+
+		if (qshowOriginOfScanAct->isChecked() == true) {//Draw origin if selected by the user
+			paint->fillRect (500 -8, 800 - 8, 16, 16, QColor (255,0,0)); 
+		}
+
+		if (qshowCDDAct->isChecked() == true) {//Draw calculated driving direction if selected by the user
+			QPen pen(Qt::green, 3, Qt::DashDotLine, Qt::RoundCap, Qt::RoundJoin);
+
+			paint->setPen (pen);
+			x = (cosd (Network.GetCalculatedDrivingDirection()+90) * 10); // * 8.7
+			y = (sind (Network.GetCalculatedDrivingDirection()+90) * 10);
+			paint->drawLine (500, 800, x+500, 800-y);
+		}
+
+		label->clear();
+	    delete paint;
+		label->setPixmap(*pixmap);
+		Network.SetWasUpdated (false);
+
+	}
+}
 
 double MainWindow::sind(double angle)
 {
