@@ -24,6 +24,7 @@ private:
 	int m_nLoopTicks;
 
 	bool m_bWasUpdated;
+	int m_nUpdateCounter;
 
 
 public:
@@ -40,6 +41,8 @@ public:
 	int	 GetLoopTicks () {return m_nLoopTicks;}
 	bool GetWasUpdated () {return m_bWasUpdated;}
 	void SetWasUpdated (bool bUpdated) {m_bWasUpdated = bUpdated;}
+	int GetUpdateCounter () {return m_nUpdateCounter;}
+	void ResetUpdateCounter () {m_nUpdateCounter = 0;}
 	Position* OdometryPosition () {return &OdometryPositionData;}
 
 };

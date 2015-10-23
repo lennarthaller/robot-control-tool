@@ -16,6 +16,7 @@ int SyncNetwork::InitNetwork () {
 	m_nLoopTicks = 0;
 
 	m_bWasUpdated = false;
+	m_nUpdateCounter = 0;
 
 	return (Network.NetworkInit());
 }
@@ -51,6 +52,7 @@ void SyncNetwork::UpdateData () {
 		OdometryPositionData.fTheta = (OdometryPositionData.fTheta/1000)-10;
 
 		m_bWasUpdated = true;
+		m_nUpdateCounter ++;
 	 }
 
 	 //Network.Clear();
