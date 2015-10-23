@@ -21,6 +21,7 @@ MainWindow::MainWindow()
 	createDockWindow ();
 
 	pixmap = new QPixmap (1000, 1000);
+	m_nNetworkUpdatesperSecond = 0;
 
     setWindowTitle(tr("Robot Control Tool"));
 }
@@ -99,7 +100,9 @@ void MainWindow::ConnectToRobot () {
 		}else{
 			QMessageBox::information(this, tr("Connection status"), tr("You are now connected to the robot."));
 				UpdateTimer.start(UPDATEFREQUENCY);
+				NetworkUpdateCounterTimer.start(1000);
 				connect(&UpdateTimer, SIGNAL (timeout()), this, SLOT (UpdateData()));
+				connect(&NetworkUpdateCounterTimer, SIGNAL (timeout()), this, SLOT (CountNetworkUpdates()));
 				bConnected = true;
 		}
 	}else{
@@ -141,10 +144,6 @@ void MainWindow::ShowGeneralData () {
 	}else{
 		QMessageBox::information(this, tr("Information"), tr("You need to connect to the robot first."));
 	}
-}
-
-extern void aFunction (void) {
-
 }
 
 void MainWindow::DisplayMotorData () {
@@ -207,17 +206,22 @@ void MainWindow::DisplayMotorData () {
 void MainWindow::DisplayGeneralData () {
 	textEdit->clear();
 
-	textEdit->setText ("Operating Voltage "); 
+	textEdit->setText ("Operating Voltage: "); 
 	textEdit->moveCursor (QTextCursor::End);
 	textEdit->insertPlainText (QString::number(Network.GetVoltage()));
 	textEdit->moveCursor (QTextCursor::End);
 	
-	textEdit->append ("Main loop ticks per second "); 
+	textEdit->append ("Main loop ticks per second: "); 
 	textEdit->moveCursor (QTextCursor::End);
 	textEdit->insertPlainText (QString::number(Network.GetLoopTicks()));
 	textEdit->moveCursor (QTextCursor::End);
 
-	textEdit->append ("\n\nCalculated driving direction "); 
+	textEdit->append ("Network Updates per second: "); 
+	textEdit->moveCursor (QTextCursor::End);
+	textEdit->insertPlainText (QString::number(m_nNetworkUpdatesperSecond));
+	textEdit->moveCursor (QTextCursor::End);
+
+	textEdit->append ("\n\nCalculated driving direction: "); 
 	textEdit->moveCursor (QTextCursor::End);
 	textEdit->insertPlainText (QString::number(Network.GetCalculatedDrivingDirection()));
 	textEdit->moveCursor (QTextCursor::End);
@@ -254,8 +258,6 @@ void MainWindow::DisplayScan () {
 		
 		pixmap->fill (QColor (160, 160, 160, 255));
 		QPainter *paint = new QPainter (pixmap);
-
-
 
 		double x, y;
 
@@ -302,4 +304,9 @@ double MainWindow::cosd(double angle)
 
 void  MainWindow::UpdateData () {
 	Network.UpdateData ();
+}
+
+void MainWindow::CountNetworkUpdates () {
+	m_nNetworkUpdatesperSecond = Network.GetUpdateCounter ();
+	Network.ResetUpdateCounter ();
 }

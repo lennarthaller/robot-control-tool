@@ -25,6 +25,7 @@ private slots:
 	void DisplayMotorData ();
 	void DisplayGeneralData ();
 	void UpdateData ();
+	void CountNetworkUpdates ();
 
 private:
     void createActions();
@@ -35,8 +36,10 @@ private:
 	double cosd (double angle);
 
 	bool bConnected;
+	int m_nNetworkUpdatesperSecond;
 
 	QTimer UpdateTimer;
+	QTimer NetworkUpdateCounterTimer;
 	QTimer timer;
 
 	QLabel *label;
